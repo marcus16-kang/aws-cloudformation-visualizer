@@ -6,6 +6,13 @@ from .utils import print_event
 
 
 def visualizer(client: botocore.client.BaseClient, stack_name: str):
+    """
+    Print CloudFormation events pretty.
+
+    :param client:
+    :param stack_name:
+    :return:
+    """
     try:
         if isinstance(client, botocore.client.BaseClient):
             event_count = _initial_visualize(client, stack_name)
@@ -19,20 +26,28 @@ def visualizer(client: botocore.client.BaseClient, stack_name: str):
                     raise StackFailedError(stack_name)
 
                 elif 'COMPLETE' in stack_status:
+                    events = client.describe_stack_events(StackName=stack_name)['StackEvents']
+
+                    if len(events) >= event_count:
+                        remainder_count = len(events) - event_count
+
+                        for i in range(remainder_count - 1, -1, -1):
+                            print_event(events[i])
+
                     return
 
                 else:
                     events = client.describe_stack_events(StackName=stack_name)['StackEvents']
 
-                    if len(events) > event_count:
+                    if len(events) >= event_count:
                         remainder_count = len(events) - event_count
 
-                        for i in range(remainder_count - 1, 0, -1):
+                        for i in range(remainder_count - 1, -1, -1):
                             print_event(events[i])
 
                         event_count = len(events)
 
-                    time.sleep(1)
+                time.sleep(1)
 
         else:
             raise InvalidClientError
