@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='aws-cloudformation-visualizer',
-    version='0.0.1',
+    version='0.0.2',
     author='marcus16-kang',
     description='AWS CloudFormation Visualizer Tool.',
     author_email='marcus16-kang@outlook.com',
