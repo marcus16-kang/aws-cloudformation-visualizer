@@ -23,7 +23,7 @@ def get_timestamp(timestamp: datetime):
 
 
 def print_event(event: dict):
-    event_info = ' {:>11} | {} | {:<40} | {:<35} | {}'.format(
+    event_info = ' {:>11} | {} | {:<41} | {:<36} | {}'.format(
         # 10:20:58 AM | CREATE_IN_PROGRESS          | AWS::CloudFormation::Stack                     | User Initiated
         get_timestamp(event.get('Timestamp')),
         get_status(event.get('ResourceStatus')),
