@@ -22,7 +22,9 @@ def visualizer(client: botocore.client.BaseClient, stack_name: str):
                 stack_status = stack_response['Stacks'][0]['StackStatus']
                 stack_name = stack_response['Stacks'][0]['StackId']
 
-                if 'FAILED' in stack_status or 'ROLLBACK' in stack_status:  # creation, deletion, update failed
+                if 'FAILED' in stack_status or 'ROLLBACK_COMPLETE' == stack_status:  # creation, deletion, update failed
+                    events = client.describe_stack_events(StackName=stack_name)['StackEvents']
+                    print_event(events[0])
                     raise StackFailedError(stack_name)
 
                 elif 'COMPLETE' in stack_status:
